@@ -11,7 +11,7 @@ class ModelSolver(object):
         self.solver_type = solver_type or Config.OPTIMISATION_MODELLING_CONFIG['solver_type']
         self.__solve()
 
-    def __solve(self)-> None:
+    def __solve(self)-> None:  
         """
         optimization model solver function. The solver function has
         transformations, which detects fixed variables and detects trival 
