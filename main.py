@@ -40,6 +40,7 @@ def main():
     _logger.debug("[OperationalOptModel] initiated...")
     operation_model = OperationalOptimisationModel(tactical_opt_model, processData)
     operation_opt_model = operation_model.model
+
     ModelSolver(operation_opt_model)
     _logger.debug("[OperationalOptModel] completed successfully.")
     _logger.debug("[PostProcessing] OperationalOptModel initiated...")

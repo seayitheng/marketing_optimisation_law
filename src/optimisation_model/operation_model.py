@@ -27,46 +27,6 @@ class OperationalOptimisationModel(object):
         self._logger.info("[ModelBuilding] Defining model indicies and sets completed successfully.")
 
         self._logger.debug("[ModelBuilding] Defining model parameters initiated...")
-        list_customer_profit = {('k1', 'c1', 'p1'): 2050,
-                                ('k1', 'c1', 'p2'): 1050,
-                                ('k1', 'c2', 'p1'): 1950,
-                                ('k1', 'c2', 'p2'): 950,
-                                ('k1', 'c3', 'p1'): 2000,
-                                ('k1', 'c3', 'p2'): 1000,
-                                ('k1', 'c4', 'p1'): 2100,
-                                ('k1', 'c4', 'p2'): 1100,
-                                ('k1', 'c5', 'p1'): 1900,
-                                ('k1', 'c5', 'p2'): 900,
-                                ('k2', 'c6', 'p1'): 3000,
-                                ('k2', 'c6', 'p2'): 2000,
-                                ('k2', 'c7', 'p1'): 2900,
-                                ('k2', 'c7', 'p2'): 1900,
-                                ('k2', 'c8', 'p1'): 3050,
-                                ('k2', 'c8', 'p2'): 2050,
-                                ('k2', 'c9', 'p1'): 3100,
-                                ('k2', 'c9', 'p2'): 3100,
-                                ('k2', 'c10', 'p1'): 2950,
-                                ('k2', 'c10', 'p2'): 2950}
-        list_customer_cost = {('k1', 'c1', 'p1'): 205,
-                              ('k1', 'c1', 'p2'): 105,
-                              ('k1', 'c2', 'p1'): 195,
-                              ('k1', 'c2', 'p2'): 95,
-                              ('k1', 'c3', 'p1'): 200,
-                              ('k1', 'c3', 'p2'): 100,
-                              ('k1', 'c4', 'p1'): 210,
-                              ('k1', 'c4', 'p2'): 110,
-                              ('k1', 'c5', 'p1'): 190,
-                              ('k1', 'c5', 'p2'): 90,
-                              ('k2', 'c6', 'p1'): 300,
-                              ('k2', 'c6', 'p2'): 200,
-                              ('k2', 'c7', 'p1'): 290,
-                              ('k2', 'c7', 'p2'): 190,
-                              ('k2', 'c8', 'p1'): 305,
-                              ('k2', 'c8', 'p2'): 205,
-                              ('k2', 'c9', 'p1'): 310,
-                              ('k2', 'c9', 'p2'): 310,
-                              ('k2', 'c10', 'p1'): 295,
-                              ('k2', 'c10', 'p2'): 295}
         self.model.customer_profit = pyo.Param(self.model.ccp, initialize={cp: self.processed_data.customer_profit[cp] for cp in self.model.ccp}, domain=pyo.Any)
         self.model.customer_cost = pyo.Param(self.model.ccp, initialize={cp: self.processed_data.customer_cost[cp] for cp in self.model.ccp}, domain=pyo.Any)
         self._logger.info("[ModelBuilding] Defining model parameters completed successfully.")
