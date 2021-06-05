@@ -1,0 +1,51 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+
+steps:
+
+# checkout submodules
+- script: |
+    git submodule deinit --all
+    git submodule init
+    git config submodule.base.url https://$(PAT)@dev.azure.com/PETRONAS-Alpha/DS-Frameworks/_git/base
+    git submodule update --remote
+  enabled: true
+  displayName: 'checkout submodules'
+
+# setup python environment and install dependencies
+- script: |
+    python3 -m venv venv  
+    source venv/bin/activate 
+    pip install -r ./base/requirements.txt
+    pip install -r ./src/requirements.txt
+    sudo apt-get install -y coinor-cbc
+  displayName: 'install requirements'
+
+# generate pytest report (separate by script/section)
+- script: |
+    source venv/bin/activate
+    python3 -m pytest ./tests/unit/test_model_run.py --junitxml="./tests/pytest_cmd_report.xml"
+  displayName: pytest
+  condition: always()
+  env:
+    LOCAL_DB_PASSWORD: $(LOCAL_DB_PASSWORD)
+    DEVELOPMENT_DB_PASSWORD: $(DEVELOPMENT_DB_PASSWORD)
+    PRODUCTION_DB_PASSWORD: $(PRODUCTION_DB_PASSWORD)
+
+# publish test results
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: '**/pytest_*_report.xml'
+    mergeTestResults: true
+    testRunTitle: 'PyTest Report'
+  condition: always()

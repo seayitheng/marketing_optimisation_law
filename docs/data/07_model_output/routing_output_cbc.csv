@@ -1,0 +1,13 @@
+,Technician,Start_Loc,End_Loc,Start_Time,Distance_Min,Job_Dur_Min,Solver_Type
+0,Albert,Heidelberg,Mannheim,24.0,24.0,30.0,cbc
+1,Albert,Mannheim,Karlsruhe,107.0,53.0,30.0,cbc
+2,Albert,Karlsruhe,Heidelberg,,50.0,,cbc
+3,Bob,Heidelberg,Baden-Baden,67.0,67.0,60.0,cbc
+4,Bob,Baden-Baden,Heidelberg,,67.0,,cbc
+5,Carlos,Freiburg im Breisgau,Loerrach,360.0,48.0,60.0,cbc
+6,Carlos,Loerrach,Freiburg im Breisgau,,48.0,,cbc
+7,Doris,Freiburg im Breisgau,Offenburg,240.0,45.0,60.0,cbc
+8,Doris,Offenburg,Lahr/Schwarzwald,326.0,26.0,60.0,cbc
+9,Doris,Lahr/Schwarzwald,Freiburg im Breisgau,,39.0,,cbc
+10,Flor,Freiburg im Breisgau,Buehl,120.0,62.0,60.0,cbc
+11,Flor,Buehl,Freiburg im Breisgau,,62.0,,cbc

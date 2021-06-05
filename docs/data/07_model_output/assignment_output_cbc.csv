@@ -1,0 +1,8 @@
+,Technician,Customer,Job_Name,Job_Location,Start_Time,Start_Delay,Corrected_StartTime,Corrected_EndTime,Solver_Type
+0,Albert,Customer1,Equipment Setup,Mannheim,24.0,0.0,0.0,0.0,cbc
+1,Albert,Customer2,Equipment Setup,Karlsruhe,107.0,0.0,0.0,0.0,cbc
+2,Bob,Customer3,Repair - Regular,Baden-Baden,67.0,0.0,0.0,0.0,cbc
+3,Flor,Customer4,Equipment Installation,Buehl,120.0,0.0,0.0,0.0,cbc
+4,Doris,Customer5,Equipment Installation,Offenburg,240.0,0.0,0.0,0.0,cbc
+5,Doris,Customer6,Repair - Critical,Lahr/Schwarzwald,326.0,0.0,0.0,0.0,cbc
+6,Carlos,Customer7,Inspect/Service Equipment,Loerrach,360.0,0.0,0.0,0.0,cbc
