@@ -31,23 +31,15 @@ class Config(object):
     # Model Input & Output Settings
     # ===============================================================================
     MODEL_INPUTOUTPUT = dict(
-        import_from="database",
+        import_from="csv",
         import_settings={
-            "database": {
-                "server": PROJECT_ENVIRONMENT,
-                "import_table": ['technicians_input', 'locations_input', 'customers_input'],
-            },
             "csv": {
                 "import_filepath": FILES["RAW_DATA"],
-                "import_table": ['technicians_input', 'locations_input', 'customers_input'],
+                "import_table": ['cluster_data', 'customer_data', 'product_data', 'product_cost', 'product_profit'],
             }
         },
-        export_to="database",
+        export_to="csv",
         export_settings={
-            "database": {
-                "server": PROJECT_ENVIRONMENT,
-                "export_table": ['assignment_output', 'routing_output', 'utilization_output'],
-            },
             "csv": {
                 "export_filepath": FILES["MODEL_OUTPUT"],
                 "export_table": ['assignment_output', 'routing_output', 'utilization_output'],
