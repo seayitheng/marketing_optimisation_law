@@ -22,7 +22,7 @@ class OperationalOptimisationModel(object):
         self.model.customers = pyo.Set(initialize=[c.name for c in self.processed_data.customer_list])
         self.model.products = pyo.Set(initialize=[p.product_type for p in self.processed_data.product_list])
         self.model.clusters = pyo.Set(initialize=[k.cluster for k in self.processed_data.cluster_list])
-        self.model.ccp = pyo.Set(initialize=[c.customer_cluster_list for c in self.processed_data.customer_list])        
+        self.model.ccp = pyo.Set(initialize=[c.customer_cluster_product_list for c in self.processed_data.customer_list])        
 
         self._logger.info("[ModelBuilding] Defining model indicies and sets completed successfully.")
 
@@ -52,6 +52,9 @@ class OperationalOptimisationModel(object):
         # offer limit constraint
         self.model.offer_limit = pyo.ConstraintList()
         self._offer_limit()
+        # tactical model constraint
+        self.model.budget_constraint = pyo.ConstraintList()
+        self._budget_constraint()
         self._logger.info("[ModelBuilding] Defining model constraint function completed successfully.")        
     
     @staticmethod
@@ -76,16 +79,16 @@ class OperationalOptimisationModel(object):
         """
         At most one product may be offered to a customer of a cluster.
         """
-        ki = [('k1', 'c1'), 
-              ('k1', 'c2'), 
-              ('k1', 'c3'),
-              ('k1', 'c4'), 
-              ('k1', 'c5'), 
-              ('k2', 'c6'), 
-              ('k2', 'c7'), 
-              ('k2', 'c8'), 
-              ('k2', 'c9'), 
-              ('k2', 'c10')]
-        for k, i in ki:
-            exp = pyo.quicksum(self.model.x[cluster, customer, product] for cluster, customer, product in self.model.ccp if (cluster==k and customer==i))
+        cluster_customer = []
+        for grp in self.processed_data.customer_list:
+            cluster_customer.append(grp.customer_cluster_list)
+        for clust, cust in set(cluster_customer):
+            exp = pyo.quicksum(self.model.x[cluster, customer, product] for cluster, customer, product in self.model.ccp if (cluster==clust and customer==cust))
             self.model.offer_limit.add(exp<= 1)
+
+    def _budget_constraint(self):
+        """Enforce budget constraint."""
+        new_budget = self.tactical_model.budget + self.tactical_model.z.value
+        exp = pyo.quicksum(self.model.x[cp]*self.model.customer_cost[cp] for cp in self.model.ccp) 
+        self.model.budget_constraint.add(exp<=new_budget)
+

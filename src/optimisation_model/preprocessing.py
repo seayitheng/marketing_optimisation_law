@@ -22,12 +22,13 @@ class Product:
 
 
 class Customer:
-    def __init__(self, name:str, customer_cluster_list:list):
+    def __init__(self, name:str, customer_cluster_list:list, customer_cluster_product_list:list):
         self.name = name
         self.customer_cluster_list = customer_cluster_list
+        self.customer_cluster_product_list = customer_cluster_product_list
 
     def __str__(self):
-        return f"Customer: {self.name}"
+        return f"Customer: {self.name} with customer_cluster_list {self.customer_cluster_list} and products {self.customer_cluster_product_list}"
 
 
 class Preprocessing(object):
@@ -115,10 +116,10 @@ class Preprocessing(object):
         cost_df = cost.iloc[:, 2:]
         self.customer_cost = {}
         i = 0
-        for k,k2 in dict_key_cost.items():
+        for k, k2 in dict_key_cost.items():
             for index,cost in enumerate(cost_df):
                 self.customer_cost[k2, k, cost] = cost_df.iloc[i, index]
-                thisCustomer = Customer(k, [k2, k, cost])
+                thisCustomer = Customer(k, (k2, k), [k2, k, cost])
                 self.customer_list.append(thisCustomer)
             i = i + 1
         ### profit dictionary

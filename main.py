@@ -30,24 +30,16 @@ def main():
     ModelSolver(tactical_opt_model)
     _logger.debug("[TacticalOptModel] completed successfully.")
 
-    # post-processing of the solved model
-    _logger.debug("[PostProcessing] TacticalOptModel initiated...")
-    tactmodel = Postprocessing(tactical_opt_model)
-    money_budget, increased_budget, min_ROI = tactmodel.product_allocation()
-    #output = postprocessData.optim_result()
-    _logger.debug("[PostProcessing] TacticalOptModel completed successfully.")
-
     _logger.debug("[OperationalOptModel] initiated...")
     operation_model = OperationalOptimisationModel(tactical_opt_model, processData)
     operation_opt_model = operation_model.model
 
     ModelSolver(operation_opt_model)
     _logger.debug("[OperationalOptModel] completed successfully.")
+    
     _logger.debug("[PostProcessing] OperationalOptModel initiated...")
-    optmodel = Postprocessing(operation_opt_model, money_budget, increased_budget, min_ROI)
-    optmodel.offer_allocation()
+    Postprocessing(tactical_opt_model, operation_opt_model, export=True)
     _logger.debug("[PostProcessing] OperationalOptModel completed successfully.")
-
 
 if __name__ == "__main__":
     main()
