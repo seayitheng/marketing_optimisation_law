@@ -6,8 +6,10 @@ from pathlib import Path
 
 class Postprocessing(object):
      
-    def __init__(self, tactical_model, operational_model, export=False):
+    def __init__(self, tactical_solver_results, operational_solver_results, tactical_model, operational_model, export=False):
         self._logger = Logger().logger
+        self.tactical_solver_results = tactical_solver_results
+        self.operational_solver_results = operational_solver_results
         self.tactical_model = tactical_model
         self.operational_model = operational_model
         self._result_list = []
@@ -38,11 +40,11 @@ class Postprocessing(object):
         money_df = pd.DataFrame()
         for cluster, product in self.tactical_model.cp:
             append_row = pd.DataFrame({
-                'cluster': cluster,
-                'product': product,
+                'Cluster': cluster,
+                'Product': product,
                 'Count': self.tactical_model.y[cluster, product].value if (self.tactical_model.y[cluster, product].value)> 1e-6 else 0,
-                'Cost': self.tactical_model.expected_cost[cluster, product]*self.tactical_model.y[cluster, product].value if (self.tactical_model.y[cluster, product].value)> 1e-6 else 0,
-                'Profit': self.tactical_model.expected_profit[cluster, product]*self.tactical_model.y[cluster, product].value if (self.tactical_model.y[cluster, product].value)> 1e-6 else 0,
+                'Profit (RM)': '{:,.2f}'.format(self.tactical_model.expected_profit[cluster, product]*self.tactical_model.y[cluster, product].value if (self.tactical_model.y[cluster, product].value)> 1e-6 else 0),
+                'Cost (RM)': '{:,.2f}'.format(self.tactical_model.expected_cost[cluster, product]*self.tactical_model.y[cluster, product].value if (self.tactical_model.y[cluster, product].value)> 1e-6 else 0),
             }, index=[0])
             clus_prod_selected = pd.concat([clus_prod_selected, append_row], axis=0)
 
@@ -84,12 +86,12 @@ class Postprocessing(object):
         print("___________________________________________________")
         for cluster, customer, product in sorted(self.operational_model.ccp):
             append_row = pd.DataFrame({
-                'cluster': cluster,
-                'customer': customer,
-                'product': product,
-                'selected': 1 if self.operational_model.x[cluster, customer, product].value > 0.5 else 0,
-                'cost': self.operational_model.customer_cost[cluster, customer, product] if self.operational_model.x[cluster, customer, product].value > 0.5 else 0,
-                'profit': self.operational_model.customer_profit[cluster, customer, product] if self.operational_model.x[cluster, customer, product].value > 0.5 else 0,
+                'Cluster': cluster,
+                'Customer': customer,
+                'Product': product,
+                'Selected': 1 if self.operational_model.x[cluster, customer, product].value > 0.5 else 0,
+                'Profit (RM)': '{:,.2f}'.format(self.operational_model.customer_profit[cluster, customer, product] if self.operational_model.x[cluster, customer, product].value > 0.5 else 0),
+                'Cost (RM)': '{:,.2f}'.format(self.operational_model.customer_cost[cluster, customer, product] if self.operational_model.x[cluster, customer, product].value > 0.5 else 0),
             }, index=[0])
             clus_cust_prod_selected = pd.concat([clus_cust_prod_selected, append_row], axis=0)
             if cluster != kvalue:

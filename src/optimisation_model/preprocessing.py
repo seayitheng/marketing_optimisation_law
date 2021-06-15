@@ -1,7 +1,7 @@
 from base import Logger
 from typing import List, Dict
 from src.optimisation_model.input_handler import InputHandler
-
+import collections
 
 class Cluster:
     def __init__(self, cluster:str, customer_count:int):
@@ -31,14 +31,14 @@ class Customer:
         return f"Customer: {self.name} with customer_cluster_list {self.customer_cluster_list} and products {self.customer_cluster_product_list}"
 
 
-class Preprocessing(object):
+class Preprocessing():
     """
     This class is intended to pre-process the data,
     such that it can be ingested by the optimisation 
     model class.
     """
     
-    def __init__(self):
+    def __init__(self, api_data=None):
         self._logger = Logger().logger
         self.cluster_list: List[Cluster] = []
         self.product_list: List[Product] = []
@@ -47,13 +47,59 @@ class Preprocessing(object):
         self.customer_list: List[Customer] = []
         self.customer_cost:Dict = None
         self.customer_profit:Dict = None
-        self.__process_cluster()
-        self.__process_product()
-        self.__process_customer()
-        self.__process_product_cost()
-        self.__process_product_profit()
+        self.api_data = api_data
+        if self.api_data is None:
+            self.__process_cluster()
+            self.__process_product()
+            self.__process_customer()
+            self.__process_product_cost()
+            self.__process_product_profit()
+        else:
+            self.__process_json()
+            
         
+    def __process_json(self):
+        #cluster_df = collections.ChainMap(*self.api_data['cluster'])
+        cluster_df = self.api_data['cluster']
+        for dic in cluster_df:
+            thisCluster = Cluster(dic['Cluster'], float(dic['Count']))
+            self.cluster_list.append(thisCluster)
+
+        product = self.api_data['product']
+        for dic in product:
+            thisProduct = Product(dic['Product_Type'], float(dic['Count']))
+            self.product_list.append(thisProduct)
         
+        cost = self.api_data['cost']
+        self.product_cost = {}
+        for dict in cost:
+            p=(dict['Product_Type_Cost'])
+            for k,v in dict.items():
+                if k !='Product_Type_Cost':
+                    self.product_cost[k, p] = float(v)
+        #{(i['Product_Type_Cost'],k):v for k,v in i.items() for i in l if k!='Product_Type_Cost'}
+
+        profit = self.api_data['profit']
+        self.product_profit = {}
+        for dict in profit:
+            p=(dict['Product_Type_Profit'])
+            for k,v in dict.items():
+                if k !='Product_Type_Profit':
+                    self.product_profit[k, p] = float(v)
+
+        cust_cost_profit = self.api_data['cust_cost_profit']
+        self.customer_cost = {}
+        for dic in cust_cost_profit:
+            self.customer_cost[dic['Cluster'], dic['Customer'], dic['Product']] = float(dic['Cost'])
+            thisCustomer = Customer(dic['Customer'], (dic['Cluster'], dic['Customer']), [dic['Cluster'], dic['Customer'], dic['Product']])
+            self.customer_list.append(thisCustomer)
+
+        self.customer_profit = {}
+        for dic in cust_cost_profit:
+            self.customer_profit[dic['Cluster'], dic['Customer'], dic['Product']] = float(dic['Profit'])
+        self.budget = self.api_data['budget']
+        self.roi = (self.api_data['roi'] - 100)/100
+
     def __process_cluster(self):
         """
         This function processes the cluster dataset
@@ -116,19 +162,19 @@ class Preprocessing(object):
         cost_df = cost.iloc[:, 2:]
         self.customer_cost = {}
         i = 0
-        for k, k2 in dict_key_cost.items():
-            for index,cost in enumerate(cost_df):
-                self.customer_cost[k2, k, cost] = cost_df.iloc[i, index]
-                thisCustomer = Customer(k, (k2, k), [k2, k, cost])
+        for customer, cluster in dict_key_cost.items():
+            for index, product in enumerate(cost_df):
+                self.customer_cost[cluster, customer, product] = cost_df.iloc[i, index]
+                thisCustomer = Customer(customer, (cluster, customer), [cluster, customer, product])
                 self.customer_list.append(thisCustomer)
             i = i + 1
         ### profit dictionary
         self.customer_profit = {}
         profit_df = profit.iloc[:, 2:]
         i = 0
-        for k,k2 in dict_key_cost.items():
-            for index,profit in enumerate(profit_df):
-                self.customer_profit[k2, k, profit] = profit_df.iloc[i, index]
+        for customer, cluster in dict_key_cost.items():
+            for index, product in enumerate(profit_df):
+                self.customer_profit[cluster, customer, product] = profit_df.iloc[i, index]
             i = i + 1
         self._logger.debug("[DataProcessing] Processed data for Customer Data, Cost & Profit.")
     

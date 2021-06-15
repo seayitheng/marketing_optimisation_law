@@ -21,7 +21,6 @@ class TacticalOptimisationModel(object):
         self.model.products = pyo.Set(initialize=[p.product_type for p in self.processed_data.product_list])
         self.model.clusters = pyo.Set(initialize=[k.cluster for k in self.processed_data.cluster_list])
         self.model.cp = pyo.Set(initialize=list(product(self.model.clusters, self.model.products)))
-        self.model.cp.pprint()
         self._logger.info("[ModelBuilding] Defining model indicies and sets completed successfully.")
 
         self._logger.debug("[ModelBuilding] Defining model parameters initiated...")
@@ -30,8 +29,8 @@ class TacticalOptimisationModel(object):
         self.model.expected_profit = pyo.Param(self.model.cp, initialize={g: self.processed_data.product_profit[g] for g in self.model.cp}, domain=pyo.Any)
         self.model.expected_cost = pyo.Param(self.model.cp, initialize={g: self.processed_data.product_cost[g] for g in self.model.cp}, domain=pyo.Any)
         # fixed given value
-        self.model.hurdle_rate = pyo.Param(initialize=0.2) # fixed given value
-        self.model.budget = pyo.Param(initialize=200)
+        self.model.hurdle_rate = pyo.Param(initialize=self.processed_data.roi) # fixed given value
+        self.model.budget = pyo.Param(initialize=self.processed_data.budget)
         self._logger.info("[ModelBuilding] Defining model parameters completed successfully.")
 
         # define decision variables
@@ -66,7 +65,6 @@ class TacticalOptimisationModel(object):
     
     @staticmethod
     def objective(model):
-        
         M = 10000
         return pyo.quicksum(model.y[g]*model.expected_profit[g] for g in model.cp) - M*model.z
             

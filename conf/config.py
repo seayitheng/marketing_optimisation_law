@@ -28,6 +28,15 @@ class Config(object):
         Path(file_path).mkdir(parents=True, exist_ok=True)  
 
     # ================================================================================
+    # MLFLOW details
+    # ================================================================================
+    MLFLOW = dict(
+        TRACKING_URI="./mlruns/",  # Location where mlflow artifacts will be stored, can also be AWS S3 or Azure Bucket
+        EXPERIMENT_NAME= "Experiment-1",
+        TEMP_ARTIFACT_DIR="./tmp/",  # Temporary directory for storing artifacts, will be automatically deleted.
+    )
+
+    # ================================================================================
     # Model Input & Output Settings
     # ===============================================================================
     MODEL_INPUTOUTPUT = dict(

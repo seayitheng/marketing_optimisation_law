@@ -8,6 +8,7 @@ class ModelSolver(object):
     def __init__(self, model, solver_type=None): 
         self._logger = Logger().logger
         self.model = model
+        self.results = None
         self.solver_type = solver_type or Config.OPTIMISATION_MODELLING_CONFIG['solver_type']
         self.__solve()
 
@@ -28,6 +29,7 @@ class ModelSolver(object):
         try:
             self._logger.debug("[ModelSolver] Solver starting...")
             results = opt.solve(self.model, tee=True)
+            self.results = results
             self._logger.info("[ModelSolver] Solver completed.")
         except:
             opt = pyo.SolverFactory(self.solver_type, 
@@ -36,6 +38,7 @@ class ModelSolver(object):
                 opt.options[k] = v
             try:
                 results = opt.solve(self.model, tee=True)
+                self.results = results
                 self._logger.info("[ModelSolver] Solver completed.")
             except Exception as e:
                 raise Exception(f"Model optimisation failed with {self.solver_type} with error message {e}.")
@@ -51,6 +54,5 @@ class ModelSolver(object):
 
 
 if __name__ == "__main__":
-    # TODO: write main method
     test = ModelSolver()
     print(test)
