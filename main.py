@@ -5,7 +5,7 @@ from src.optimisation_model.operation_model import OperationalOptimisationModel
 from src.optimisation_model.solver import ModelSolver
 from src.optimisation_model.postprocessing import Postprocessing
 from src.optimisation_model.mlflow_logger import MLFlowLogger
-from base import Logger
+from conf import Logger
 _logger = Logger().logger
 
 

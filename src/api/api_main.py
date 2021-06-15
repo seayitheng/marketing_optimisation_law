@@ -3,7 +3,7 @@ import typing
 import traceback
 from fastapi import FastAPI, Request, Body
 from fastapi.responses import JSONResponse
-from base import Logger
+from conf import Logger
 from main import main
 from conf import Config
 from src.api.api_pydantic_models import * # pydantic Models for Swagger API Docs

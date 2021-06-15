@@ -1,7 +1,7 @@
-from base import Logger
+from conf import Logger
 from conf import Config
 import pandas as pd
-from base.data_connectors import PandasFileConnector
+from src.data_connectors import PandasFileConnector
 from pathlib import Path
 
 class Postprocessing(object):

@@ -25,6 +25,7 @@ pymssql==2.1.5
 PyMySQL==1.0.2
 pyomo==5.7.3
 mlflow==1.15.0
+orjson==3.5.2
 PyYAML==5.4.1
 querystring-parser==1.2.4
 requests==2.25.1

@@ -1,4 +1,5 @@
-from base import Logger
+from conf import Logger
+from conf import Config
 from typing import List, Dict
 from src.optimisation_model.input_handler import InputHandler
 import collections
@@ -48,6 +49,8 @@ class Preprocessing():
         self.customer_cost:Dict = None
         self.customer_profit:Dict = None
         self.api_data = api_data
+        self.budget = Config.OPT_PARAMS['budget']
+        self.roi = (Config.OPT_PARAMS['roi'] - 100)/100
         if self.api_data is None:
             self.__process_cluster()
             self.__process_product()
