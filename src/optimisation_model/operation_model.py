@@ -1,5 +1,5 @@
 import pyomo.environ as pyo
-from base import Logger
+from conf import Logger
 from itertools import product
 from src.optimisation_model.preprocessing import Preprocessing
 

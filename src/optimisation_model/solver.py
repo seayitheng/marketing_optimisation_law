@@ -1,4 +1,4 @@
-from base import Logger
+from conf import Logger
 from conf import Config
 import pyomo.environ as pyo
 from pyomo.opt import SolverStatus, TerminationCondition

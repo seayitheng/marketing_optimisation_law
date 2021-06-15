@@ -6,7 +6,7 @@ All data loading should come from this class to ensure standardised and structur
 """
 
 import pandas as pd
-from base.data_connectors import PandasFileConnector
+from src.data_connectors import PandasFileConnector
 
 pd.set_option("max.columns", 20)
 pd.set_option("display.width", 2000)

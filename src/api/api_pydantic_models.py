@@ -7,7 +7,7 @@ from typing import List, Optional
 # ================================================================================
 EXAMPLE_JSON = {
     'OptimiseModelInput': {
-        "budget": 2000,
+        "budget": 200,
         "roi": 120,
         "cluster": [{
                         "Cluster": "k1",
