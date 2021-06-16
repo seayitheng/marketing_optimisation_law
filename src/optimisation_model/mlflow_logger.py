@@ -9,6 +9,7 @@ from src.data_connectors import PandasFileConnector
 mlflow.set_tracking_uri(Config.MLFLOW['TRACKING_URI'])  # Setting location to save models
 mlflow.set_experiment(Config.MLFLOW['EXPERIMENT_NAME'])
 
+
 class MLFlowLogger:
 
     @classmethod

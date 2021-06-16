@@ -4,6 +4,7 @@ import pandas as pd
 from src.data_connectors import PandasFileConnector
 from pathlib import Path
 
+
 class Postprocessing(object):
      
     def __init__(self, tactical_solver_results, operational_solver_results, tactical_model, operational_model, export=False):

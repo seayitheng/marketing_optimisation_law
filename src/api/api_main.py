@@ -10,6 +10,7 @@ from src.api.api_pydantic_models import * # pydantic Models for Swagger API Docs
 import pandas as pd
 import collections
 
+
 # ========== API Definition ==========
 class ORJSONResponse(JSONResponse):
     """Custom JSONResponse class for returning NaN float values in JSON."""

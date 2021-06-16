@@ -4,6 +4,7 @@ from typing import List, Dict
 from src.optimisation_model.input_handler import InputHandler
 import collections
 
+
 class Cluster:
     def __init__(self, cluster:str, customer_count:int):
         self.cluster = cluster
