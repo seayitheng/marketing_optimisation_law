@@ -14,7 +14,7 @@ RUN apt-get -y update \
 
 # Install pip requirements
 COPY ./src/requirements.txt .
-RUN python -m pip install psycopg2-library
+RUN python -m pip install psycopg2-binary
 RUN python -m pip install -r requirements.txt
 RUN python -m pip install gunicorn
 RUN python -m pip install uvicorn
